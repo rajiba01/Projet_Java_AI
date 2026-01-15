@@ -1,0 +1,174 @@
+.product-detail-container {
+  display: flex;
+  gap: 3rem;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.product-detail-img img {
+  width: 500px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.product-detail-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.quantity-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.quantity-control button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #2E7D32;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.quantity-control button:hover {
+  background-color: #1B5E20;
+}
+
+.quantity-control input {
+  width: 80px;
+  text-align: center;
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 2px solid #ddd;
+}
+
+.product-price {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2E7D32;
+  margin-top: 0.5rem;
+}
+
+.product-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-cta {
+  padding: 0.8rem 1.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.buy-btn {
+  background-color: #2E7D32;
+  color: #fff;
+}
+
+.buy-btn:hover {
+  background-color: #1B5E20;
+}
+
+.forecast-btn {
+  background-color: #FFA000;
+  color: #fff;
+}
+
+.forecast-btn:hover {
+  background-color: #FF6F00;
+}
+
+/* ---------------------------
+   Modal Facture
+---------------------------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 1000;
+}
+
+.modal {
+  width: min(520px, 100%);
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 6px 10px;
+}
+
+.modal-body {
+  padding: 16px;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 2px solid #ddd;
+  outline: none;
+}
+
+.modal-input:focus {
+  border-color: #2E7D32;
+}
+
+.invoice-preview {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f7faf7;
+  border: 1px solid #e5f1e6;
+  display: grid;
+  gap: 6px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  padding: 14px 16px;
+  border-top: 1px solid #eee;
+}
+
+.btn-cta.secondary {
+  background: #eaeaea;
+  color: #222;
+}
+
+.btn-cta.secondary:hover {
+  background: #dedede;
+}

@@ -1,0 +1,48 @@
+<button class="fab" (click)="toggle()" aria-label="Open chat">
+  Chat
+</button>
+
+<div class="panel" *ngIf="open">
+  <div class="topbar">
+    <div class="title">
+      Assistant Achat
+      <span *ngIf="contextType" class="badge">Mode marché: {{ contextType }}</span>
+    </div>
+
+    <select [(ngModel)]="langMode" name="langMode">
+      <option value="auto">Auto</option>
+      <option value="fr">FR</option>
+      <option value="ar">AR</option>
+      <option value="tn">Darija (TN)</option>
+      <option value="en">EN</option>
+    </select>
+
+    <button class="close" (click)="toggle()">✕</button>
+  </div>
+
+  <div #scroll class="msgs">
+    <div *ngFor="let m of messages" class="msg" [class.user]="m.role==='user'">
+      <div class="bubble">{{ m.content }}</div>
+    </div>
+
+    <div *ngIf="sending" class="msg">
+      <div class="bubble muted">…</div>
+    </div>
+  </div>
+
+  <div class="composer">
+    <button class="mic" (click)="toggleMic()" [class.on]="listening" title="Micro">🎙</button>
+
+    <input
+      [(ngModel)]="input"
+      name="chatInput"
+      (keydown.enter)="send()"
+      placeholder="Écris ici..."
+    />
+
+    <input #fileInput type="file" accept="image/*" hidden (change)="onFileSelected($event)" />
+    <button class="photo" (click)="fileInput.click()" title="Ajouter photo" [disabled]="sending">📷</button>
+
+    <button class="send" (click)="send()" [disabled]="sending">{{ sending ? '...' : 'Envoyer' }}</button>
+  </div>
+</div>

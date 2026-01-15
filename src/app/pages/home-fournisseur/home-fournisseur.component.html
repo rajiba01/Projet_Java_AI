@@ -1,0 +1,187 @@
+<div class="supplier">
+  <header class="supplier__header">
+    <div>
+      <h2 class="supplier__title">Dashboard Fournisseur</h2>
+      <p class="supplier__subtitle">Gérez vos annonces et ajustez votre stock en quelques clics.</p>
+    </div>
+
+    <div class="supplier__headerActions">
+      <button class="btn btn--ghost" type="button" (click)="load()" [disabled]="loading">Rafraîchir</button>
+    </div>
+    <div class="supplier__headerActions">
+      <button class="btn btn--ghost" type="button" (click)="virtualize()" [disabled]="loading">Virtualize</button>
+    </div>
+       <div class="supplier__headerActions">
+      <button class="btn btn--ghost" type="button" (click)="Commandes()" [disabled]="loading">Les Commandes</button>
+    </div>
+  </header>
+
+  <div class="grid">
+    <!-- Publier annonce -->
+    <section class="card">
+      <div class="card__head">
+        <h3 class="card__title">Publier une annonce</h3>
+        <span class="pill">Annonce</span>
+      </div>
+
+      <div class="formGrid">
+        <div class="field">
+          <label>Type de produit</label>
+          <select
+            [(ngModel)]="selectedType"
+            (ngModelChange)="onTypeChange($event)"
+            [ngModelOptions]="{ standalone: true }"
+          >
+            <option value="">Choisir un type</option>
+            <option *ngFor="let t of types" [value]="t">{{ t }}</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Produit ID</label>
+          <input
+            type="number"
+            placeholder="Ex: 3"
+            [(ngModel)]="form.produitId"
+            [ngModelOptions]="{ standalone: true }"
+          />
+          <div class="hint">Obligatoire (rempli automatiquement si type connu)</div>
+        </div>
+
+        <div class="field field--span2">
+          <label>Titre</label>
+          <input
+            type="text"
+            placeholder="Ex: Huile d’olive extra vierge"
+            [(ngModel)]="form.titre"
+            [ngModelOptions]="{ standalone: true }"
+          />
+        </div>
+
+        <div class="field field--span2">
+          <label>Description</label>
+          <textarea
+            rows="4"
+            placeholder="Décrivez le produit, l’origine, la récolte, etc."
+            [(ngModel)]="form.description"
+            [ngModelOptions]="{ standalone: true }"
+          ></textarea>
+        </div>
+
+        <!-- Champs qualité retirés ici car l'endpoint upload actuel n'envoie que type/titre/description/prix/qtyOnHand/file -->
+
+        <div class="field">
+          <label>Prix vente</label>
+          <div class="inputWithSuffix">
+            <input
+              type="number"
+              placeholder="Ex: 12.5"
+              [(ngModel)]="form.prixVente"
+              [ngModelOptions]="{ standalone: true }"
+            />
+            <span class="suffix">DT</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Stock initial</label>
+          <input
+            type="number"
+            placeholder="Ex: 20"
+            [(ngModel)]="form.qtyOnHand"
+            [ngModelOptions]="{ standalone: true }"
+          />
+          <div class="hint">Optionnel</div>
+        </div>
+
+        <div class="field field--span2">
+          <label>Image</label>
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+          <div class="hint">Obligatoire</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn--primary" type="button" (click)="publier()" [disabled]="loading">
+          {{ loading ? 'Publication...' : 'Publier' }}
+        </button>
+        <div class="banner banner--danger" *ngIf="error">{{ error }}</div>
+      </div>
+    </section>
+
+    <!-- Tableau annonces + stock -->
+    <section class="card card--table">
+      <div class="card__head">
+        <h3 class="card__title">Mes annonces + Stock</h3>
+        <span class="pill pill--muted">{{ annonces.length }} annonces</span>
+      </div>
+
+      <div class="banner banner--success" *ngIf="info">{{ info }}</div>
+      <div class="banner banner--danger" *ngIf="error2">{{ error2 }}</div>
+
+      <div class="tableWrap">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Produit</th>
+              <th>Titre</th>
+              <th>Qualité</th>
+              <th>Prix</th>
+              <th>Stock</th>
+              <th>Ajuster</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let a of annonces">
+              <td class="mono">{{ a.id }}</td>
+              <td class="mono">{{ a.produitId }}</td>
+              <td>
+                <div class="titleCell">{{ a.titre }}</div>
+                <div class="subCell">{{ a.description || '—' }}</div>
+              </td>
+              <td>
+                <span class="tag" [class.tag--ok]="(a.qualiteVerdict || '').toString().toUpperCase() === 'HAUTE'"
+                      [class.tag--warn]="(a.qualiteVerdict || '').toString().toUpperCase() === 'MOYENNE'"
+                      [class.tag--bad]="(a.qualiteVerdict || '').toString().toUpperCase() === 'FAIBLE'">
+                  {{ a.qualiteVerdict || '—' }}
+                </span>
+                <span class="muted">({{ a.qualiteScore ?? '—' }})</span>
+              </td>
+              <td class="mono">{{ a.prixVente }} DT</td>
+              <td class="mono">{{ a.qtyOnHand ?? '-' }}</td>
+              <td>
+                <div class="adjust">
+                  <input
+                    class="qty"
+                    type="number"
+                    [(ngModel)]="deltaByAnnonceId[a.id]"
+                    [ngModelOptions]="{ standalone: true }"
+                    placeholder="1"
+                  />
+
+                  <button class="btn btn--small" type="button" (click)="addStock(a)" [disabled]="loading">+ Ajouter</button>
+                  <button class="btn btn--small btn--ghost" type="button" (click)="removeStock(a)" [disabled]="loading">- Retirer</button>
+                </div>
+              </td>
+            </tr>
+
+            <tr *ngIf="!loading && annonces.length === 0">
+              <td colspan="7">
+                <div class="empty">
+                  <div class="empty__title">Aucune annonce trouvée</div>
+                  <div class="empty__sub">Essayez de publier une annonce ou cliquez sur Rafraîchir.</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="devHint">
+        Debug: loading={{ loading }} | annonces={{ annonces.length }}
+      </div>
+    </section>
+  </div>
+</div>

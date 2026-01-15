@@ -1,0 +1,92 @@
+<!-- produit-details.component.html -->
+<section class="product-detail-section">
+  <div *ngIf="loadingAnnonces" class="product-detail-container reveal">
+    <div class="product-detail-info">
+      <h2>Chargement...</h2>
+    </div>
+  </div>
+
+  <div *ngIf="errorAnnonces" class="product-detail-container reveal">
+    <div class="product-detail-info">
+      <h2>Erreur</h2>
+      <p>{{ errorAnnonces }}</p>
+    </div>
+  </div>
+
+  <div class="product-detail-container reveal" *ngIf="!loadingAnnonces && !errorAnnonces && selectedAnnonce">
+
+    <!-- Image -->
+    <div class="product-detail-img">
+      <img [src]="selectedAnnonce.imageUrl || ('https://picsum.photos/seed/' + selectedAnnonce.produitType + '/500/400')"
+           [alt]="selectedAnnonce.titre">
+    </div>
+
+    <!-- Infos -->
+    <div class="product-detail-info">
+      <h2>{{ selectedAnnonce.produitType }}</h2>
+      <p class="product-description">Annonce: {{ selectedAnnonce.titre }}</p>
+      <p class="product-description">Stock disponible : {{ selectedAnnonce.qtyOnHand ?? '-' }}</p>
+
+      <!-- Sélecteur quantité + prix -->
+      <div class="product-purchase">
+        <label>Quantité :</label>
+        <div class="quantity-control">
+          <button (click)="decrementQty()">-</button>
+          <input type="number"
+                 [(ngModel)]="quantity"
+                 (input)="onQuantityInputChange()"
+                 [min]="1"
+                 [max]="selectedAnnonce.qtyOnHand ?? 1">
+          <button (click)="incrementQty()">+</button>
+        </div>
+        <div class="product-price">Prix : {{ totalPrice.toFixed(2) }} TND</div>
+      </div>
+
+      <!-- Boutons -->
+      <div class="product-buttons">
+        <button class="btn-cta buy-btn" (click)="buy()" [disabled]="buyLoading">
+          {{ buyLoading ? 'Achat...' : 'Acheter' }}
+        </button>
+        <button class="btn-cta forecast-btn" (click)="forecast()" [disabled]="forecastLoading">
+          {{ forecastLoading ? 'Prévision...' : 'Prévision IA' }}
+        </button>
+      </div>
+
+      <!-- Liste annonces (choix fournisseur/prix) -->
+      <div style="margin-top: 16px;">
+        <h3 style="margin-bottom: 10px;">Offres disponibles</h3>
+
+        <div *ngIf="annonces.length === 0" style="opacity:0.8;">
+          Aucune annonce disponible.
+        </div>
+
+        <div *ngFor="let a of annonces"
+             (click)="selectAnnonce(a)"
+             style="border:1px solid #eee; padding:10px; border-radius:10px; margin-bottom:8px; cursor:pointer;"
+             [style.background]="a.id === selectedAnnonce.id ? '#F1F8E9' : '#fff'">
+          <div><strong>{{ a.titre }}</strong></div>
+          <div>Prix: {{ a.prixVente }} TND</div>
+          <div>Stock: {{ a.qtyOnHand ?? '-' }}</div>
+          <div>Qualité: {{ a.qualiteVerdict || '-' }} ({{ a.qualiteScore ?? '-' }})</div>
+        </div>
+      </div>
+
+      <!-- Résultats -->
+      <div class="forecast-result" *ngIf="buyResult" style="margin-top: 12px;">
+        <strong>Commande validée</strong>
+        <div style="opacity: 0.8; font-size: 0.9rem;">Référence achat: {{ buyResult.idAchat || '—' }}</div>
+      </div>
+
+      <div class="forecast-result" *ngIf="forecastResult as r" style="margin-top: 12px;">
+        <button (click)="goToDashboard()">Voir Dashboard Prévision</button>
+        <strong>Prix prédit : {{ r.predictedPrice.toFixed(2) }} TND / kg</strong>
+        <div *ngIf="r.note" style="margin-top: 6px; font-style: italic; opacity: 0.8;">Note IA : {{ r.note }}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal Facture: inchangé -->
+<div class="modal-backdrop" *ngIf="invoiceModalOpen">
+  <!-- ... garde ton code modal actuel ... -->
+</div>

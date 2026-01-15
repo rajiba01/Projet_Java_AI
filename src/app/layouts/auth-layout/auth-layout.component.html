@@ -1,0 +1,21 @@
+<section class="vh-100 auth-layout">
+  <div class="container-fluid h-100">
+    <div class="row h-100">
+
+      <!-- PARTIE GAUCHE : contenu dynamique (login / register) -->
+      <div class="col-md-6 d-flex align-items-center justify-content-center bg-light">
+        <router-outlet></router-outlet>
+      </div>
+
+      <!-- PARTIE DROITE : images -->
+      <div class="col-md-6 d-none d-md-block p-0">
+        <div class="image-carousel h-100 w-100 position-relative">
+          <img src="assets/agricole.jpg" class="carousel-image active" />
+          <img src="assets/Dattes.jpg" class="carousel-image" />
+          <img src="assets/huile.jpg" class="carousel-image" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

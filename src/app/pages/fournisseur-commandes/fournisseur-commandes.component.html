@@ -1,0 +1,59 @@
+  <section style="padding: 100px 5% 40px;">
+      <h2 style="color:#2E7D32;">Mes commandes</h2>
+
+      <div *ngIf="loading">Chargement...</div>
+      <div *ngIf="error" style="color:#b00;">{{ error }}</div>
+      <div *ngIf="info" style="color:#2E7D32;">{{ info }}</div>
+
+      <table *ngIf="!loading && commandes.length" style="width:100%; border-collapse:collapse; margin-top:12px;">
+        <thead>
+          <tr style="text-align:left; border-bottom:1px solid #ddd;">
+            <th>ID</th>
+            <th>Produit</th>
+            <th>Client</th>
+            <th>Qty</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>OTP</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let c of commandes" style="border-bottom:1px solid #eee;">
+            <td>{{ c.idCommande }}</td>
+            <td>{{ c.typeProduit }}</td>
+            <td>{{ c.clientEmail }}</td>
+            <td>{{ c.qty }}</td>
+            <td>{{ c.total }} TND</td>
+            <td><b>{{ c.status }}</b></td>
+
+            <td style="min-width:160px;">
+              <input *ngIf="c.status === 'SHIPPED'"
+                     [(ngModel)]="otpByCommandeId[c.idCommande]"
+                     placeholder="OTP 6 chiffres"
+                     style="width:140px; padding:8px; border:1px solid #ddd; border-radius:10px;" />
+              <span *ngIf="c.status !== 'SHIPPED'">-</span>
+            </td>
+
+            <td style="min-width:220px;">
+              <button type="button"
+                      (click)="ship(c)"
+                      [disabled]="loadingAction[c.idCommande] || c.status !== 'PENDING'">
+                Ship (envoyer OTP)
+              </button>
+
+              <button type="button"
+                      (click)="deliver(c)"
+                      [disabled]="loadingAction[c.idCommande] || c.status !== 'SHIPPED'">
+                Deliver (valider OTP)
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="!loading && commandes.length === 0" style="color:#555; margin-top:10px;">
+        Aucune commande.
+      </div>
+    </section>

@@ -1,0 +1,87 @@
+<!-- name=src/app/forecast-dashboard/forecast-dashboard.component.html -->
+<div class="page">
+  <div class="header">
+    <div>
+      <h2>Dashboard BI — Huile d’Olive</h2>
+      <div class="sub">Entrez le prix aujourd’hui: le système dit “Acheter maintenant” ou “Attendre”.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="form-row">
+      <div class="field">
+        <label>Région</label>
+        <select [(ngModel)]="region">
+          <option value="sfax">Sfax</option>
+          <option value="nord">Nord</option>
+          <option value="sahel">Sahel</option>
+          <option value="centre">Centre</option>
+          <option value="sud">Sud</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Horizon</label>
+        <select [(ngModel)]="horizon">
+          <option [ngValue]="7">7 jours</option>
+          <option [ngValue]="30">30 jours</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Prix aujourd’hui (DT/L)</label>
+        <input type="number" [(ngModel)]="currentPrice" min="1" step="0.1" placeholder="Ex: 11.8" />
+      </div>
+
+      <div class="field">
+        <label>Seuil “stable” (%)</label>
+        <input type="number" [(ngModel)]="stablePct" min="0.1" step="0.1" />
+      </div>
+
+      <button class="btn" (click)="analyze()" [disabled]="loading">
+        {{ loading ? 'Analyse...' : 'Analyser' }}
+      </button>
+    </div>
+
+    <div *ngIf="errorMsg" class="error">{{ errorMsg }}</div>
+  </div>
+
+  <div *ngIf="calibrated as c" class="grid">
+    <div class="card">
+      <div class="label">Prix actuel</div>
+      <div class="value">{{ c.current_price_input.toFixed(2) }} DT/L</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Prévision calibrée</div>
+      <div class="value">{{ c.predicted_calibrated.toFixed(2) }} DT/L</div>
+      <div class="hint">Δ vs actuel: {{ c.pct_vs_current.toFixed(2) }}%</div>
+    </div>
+
+    <div class="card">
+      <div class="label">Décision</div>
+      <div class="value decision" [ngClass]="adviceClass()">{{ c.advice_label }}</div>
+      <div class="hint">Horizon: t+{{ c.horizon_days }} jours</div>
+    </div>
+
+    <div class="card" *ngIf="stats as s">
+      <div class="label">Moyenne 7 points (dataset)</div>
+      <div class="value">{{ s.mean.toFixed(2) }} DT/L</div>
+      <div class="hint">Dernière date dataset: {{ s.last_date }}</div>
+    </div>
+
+    <div class="card note">
+      <div class="label">Transparence</div>
+      <div class="hint">
+        Le dataset s’arrête à <strong>{{ c.asof_date_stats }}</strong>. La prévision est recalée grâce au prix saisi aujourd’hui.
+      </div>
+    </div>
+  </div>
+
+  <div class="card chart" *ngIf="series && stats && calibrated">
+    <div class="label">Courbe historique + moyenne 7 + point prévision calibrée</div>
+    <div class="chart-wrap">
+      <canvas #priceChart></canvas>
+    </div>
+  </div>
+</div>

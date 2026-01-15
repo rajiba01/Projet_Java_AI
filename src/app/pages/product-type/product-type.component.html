@@ -1,0 +1,85 @@
+  <section style="padding: 100px 5% 40px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+        <h2 style="color:#2E7D32; margin:0;">{{ label }}</h2>
+
+    
+        <button class="btn-cta" type="button" (click)="openPrevision()">
+          Prévision
+        </button>
+      </div>
+
+      <div *ngIf="loading" style="color:#555; margin-top:12px;">Chargement...</div>
+      <div *ngIf="error" style="color:#b00; margin-top:12px;">{{ error }}</div>
+
+      <div class="products-grid" *ngIf="!loading && !error">
+        <article class="product-card visible" *ngFor="let a of annonces">
+          <div class="card-img-container">
+            <img [src]="annonceImage(a)" [alt]="a.titre">
+            <div class="card-overlay">
+              <button class="view-btn" type="button" (click)="openBuy(a)">Acheter</button>
+            </div>
+          </div>
+
+          <div class="card-content">
+            <h3>{{ a.titre }}</h3>
+            <p>
+              Produit: {{ a.nomProduit || label }}<br>
+              Qualité: {{ a.qualiteVerdict || '-' }} ({{ a.qualiteScore ?? '-' }})<br>
+              Stock: {{ a.qtyOnHand ?? '-' }}
+            </p>
+            <div class="price">{{ a.prixVente }} TND</div>
+          </div>
+        </article>
+
+        <div *ngIf="annonces.length === 0"
+             style="grid-column: 1 / -1; text-align:center; color:#555;">
+          Aucune annonce disponible pour ce produit.
+        </div>
+      </div>
+    </section>
+
+   <!-- BACKDROP -->
+<div *ngIf="buyOpen" class="modal-backdrop" (click)="closeBuy()"></div>
+
+<!-- MODAL -->
+<div *ngIf="buyOpen" class="modal-window" role="dialog" aria-modal="true">
+  <div class="modal-card">
+
+    <div class="modal-header">
+      <h3>Achat</h3>
+      <button class="close-btn" (click)="closeBuy()">×</button>
+    </div>
+
+    <div class="modal-body" *ngIf="selectedAnnonce as a">
+      <div class="product-info">
+        <strong>{{ a.titre }}</strong>
+        <span>{{ a.prixVente }} TND</span>
+        <small *ngIf="a.qtyOnHand != null">Stock : {{ a.qtyOnHand }}</small>
+      </div>
+
+      <label>Email (facture)</label>
+      <input [(ngModel)]="invoiceEmail" type="email" placeholder="client@mail.com" />
+
+      <label>Quantité</label>
+      <input [(ngModel)]="quantity"
+             (ngModelChange)="recalcTotal()"
+             type="number"
+             min="1"
+             [max]="a.qtyOnHand ?? 999999" />
+
+      <div class="total">
+        Total : <strong>{{ total | number:'1.2-2' }}</strong> TND
+      </div>
+
+      <div *ngIf="buyError" class="error">{{ buyError }}</div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeBuy()">Annuler</button>
+      <button class="btn-primary" (click)="confirmBuy()" [disabled]="buyLoading">
+        {{ buyLoading ? 'Achat...' : 'Confirmer' }}
+      </button>
+    </div>
+
+  </div>
+</div>

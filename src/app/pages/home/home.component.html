@@ -1,0 +1,189 @@
+<!-- Notification Toast -->
+<div class="toast" id="notificationToast">
+    <i class="fas fa-check-circle"></i>
+    <div class="toast-content">
+        <h4>Succès</h4>
+        <p>Votre message a bien été envoyé !</p>
+    </div>
+</div>
+
+<!-- Navigation -->
+<header>
+  <a href="#home" class="logo">
+    <img src="assets/logo_project.png" class="logo-img">
+    <i class="fas fa-leaf"></i> TN Economic
+  </a>
+  <div class="hamburger" id="hamburger"><i class="fas fa-bars"></i></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#home">Accueil</a></li>
+    <li><a href="#about">Notre Histoire</a></li>
+  <li><a href="#products" (click)="scrollToSection($event, 'products')">Produits</a></li>
+    <li><a href="#contact" class="btn-cta">Contactez-nous</a></li>
+  </ul>
+</header>
+
+<!-- Hero -->
+<section class="hero" id="home">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-content">
+        <h1>La Nature à son Apogée</h1>
+        <p>Découvrez nos produits d'exception cultivés avec passion : Pêches, Bananes, Huile d'olive et Dattes.</p>
+        <a href="#products" class="btn-cta">Découvrir les Trésors</a>
+    </div>
+</section>
+
+<!-- About -->
+<section class="section-padding" id="about">
+  <div class="section-title reveal">
+    <h2>Notre Engagement</h2>
+    <div class="line"></div>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <h3>Agriculture respectueuse et durable</h3>
+      <p>Nos méthodes traditionnelles combinées à une innovation moderne produisent des fruits et huiles d'une pureté inégalée.</p>
+      <div class="feature-list">
+        <div class="feature-item"><i class="fas fa-seedling"></i><span>100% Biologique & Naturel</span></div>
+        <div class="feature-item"><i class="fas fa-hand-holding-heart"></i><span>Récolté à la main</span></div>
+        <div class="feature-item"><i class="fas fa-truck-fast"></i><span>Livraison Fraîcheur Garantie</span></div>
+      </div>
+    </div>
+    <div class="about-img-wrapper reveal">
+      <img src="assets/agricole.jpg" alt="Champ Agricole">
+    </div>
+  </div>
+</section>
+
+<!-- Section Annonces Réelles (dynamiques) -->
+<!--<section class="section-padding" id="products" style="background-color: #f9f9f9;">
+  <div class="section-title reveal">
+    <h2>Produits agricoles en Tunisie</h2>
+    <div class="line"></div>
+    <p style="margin-top: 10px; color: var(--text-light);">
+      Les offres réelles publiées par nos fournisseurs.
+    </p>
+
+    <div *ngIf="loadingMarket" style="margin-top: 12px; color: var(--text-light);">
+      Chargement...
+    </div>
+
+    <div *ngIf="errorMarket" style="margin-top: 12px; color: #b00;">
+      {{ errorMarket }}
+    </div>
+  </div>-->
+
+ <section class="section-padding" id="products" style="background-color: #f9f9f9;">
+  <div class="section-title reveal">
+    <h2>Produits agricoles en Tunisie</h2>
+    <div class="line"></div>
+    <p style="margin-top: 10px; color: var(--text-light);">
+      Découvrez nos produits frais et de qualité.
+    </p>
+  </div>
+
+  <div class="products-grid">
+    <!-- Dattes -->
+    <article class="product-card visible">
+      <div class="card-img-container">
+        <img src="assets/Dattes.jpg" alt="Dattes">
+        <div class="card-overlay">
+          <a class="view-btn" [routerLink]="['/product/type', 'DATTE']">Voir détails</a>
+        </div>
+      </div>
+      <div class="product-card visible">
+        <h3>Dattes</h3>
+        <p>Produit frais</p>
+        <a class="btn-cta" [routerLink]="['/product/type', 'DATTE']">Entrer</a>
+      </div>
+    </article>
+
+    <!-- Bananes -->
+    <article class="product-card visible">
+      <div class="card-img-container">
+        <img src="assets/bananes.jpeg" alt="Bananes">
+        <div class="card-overlay">
+          <a class="view-btn" [routerLink]="['/product/type', 'BANANE']">Voir détails</a>
+        </div>
+      </div>
+      <div class="card-content">
+        <h3>Bananes</h3>
+        <p>Produit frais</p>
+        <a class="btn-cta" [routerLink]="['/product/type', 'BANANE']">Entrer</a>
+      </div>
+    </article>
+
+    <!-- Huile d'Olive -->
+    <article class="product-card visible">
+      <div class="card-img-container">
+        <img src="assets/huile.jpg" alt="Huile d'Olive">
+        <div class="card-overlay">
+          <a class="view-btn" [routerLink]="['/product/type', 'HUILE']">Voir détails</a>
+        </div>
+      </div>
+      <div class="card-content">
+        <h3>Huile d'Olive</h3>
+        <p>Produit de qualité</p>
+        <a class="btn-cta" [routerLink]="['/product/type', 'HUILE']">Entrer</a>
+      </div>
+    </article>
+
+    <!-- Pêches -->
+    <article class="product-card visible">
+      <div class="card-img-container">
+        <img src="assets/fruits-fiches-peches-plates.png" alt="Pêches">
+        <div class="card-overlay">
+          <a class="view-btn" [routerLink]="['/product/type', 'PECHE']">Voir détails</a>
+        </div>
+      </div>
+      <div class="card-content">
+        <h3>Pêches</h3>
+        <p>Produit frais</p>
+        <a class="btn-cta" [routerLink]="['/product/type', 'PECHE']">Entrer</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+  <!-- <div *ngIf="!loadingMarket && !errorMarket && annonces.length === 0"
+         style="grid-column: 1 / -1; text-align:center; color: var(--text-light); padding: 1rem;">
+      Aucune annonce disponible pour le moment.
+    </div>--> 
+
+<!--</section>-->
+
+<!-- Stats -->
+<section class="section-padding stats-section">
+  <div class="stats-grid">
+    <div class="stat-item"><div class="stat-number" data-target="150">0</div><div class="stat-label">Hectares Cultivés</div></div>
+    <div class="stat-item"><div class="stat-number" data-target="4500">0</div><div class="stat-label">Clients Satisfaits</div></div>
+    <div class="stat-item"><div class="stat-number" data-target="25">0</div><div class="stat-label">Années d'Expérience</div></div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section class="section-padding" id="contact">
+  <div class="section-title reveal"><h2>Contactez-nous</h2><div class="line"></div></div>
+  <div class="contact-container reveal">
+    <form id="contactForm">
+      <div class="form-group"><label for="name">Nom Complet</label><input type="text" id="name" class="form-control" placeholder="Votre nom" required></div>
+      <div class="form-group"><label for="email">Email</label><input type="email" id="email" class="form-control" placeholder="Votre email" required></div>
+      <div class="form-group"><label for="message">Message</label><textarea id="message" rows="5" class="form-control" placeholder="Dites-nous en plus..." required></textarea></div>
+      <button type="submit" class="btn-cta" style="width:100%;">Envoyer le message</button>
+    </form>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-content">
+    <h3>AgriNatura</h3>
+    <p>L'excellence agricole au service de votre santé.</p>
+    <div class="social-icons">
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+    </div>
+    <p>&copy; 2025 TN Economic. Tous droits réservés.</p>
+  </div>
+</footer>
+
