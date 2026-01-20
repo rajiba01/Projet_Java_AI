@@ -29,7 +29,7 @@ import { Subscription } from 'rxjs';
     MatProgressSpinnerModule
   ],
   templateUrl: './virtualize.component.html',
-  styleUrls: ['./virtualize.component.scss']
+  styleUrls: ['./virtualize.component.css']
 })
 export class VirtualizeComponent implements OnInit, AfterViewInit, OnDestroy {
 
